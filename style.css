@@ -1,0 +1,141 @@
+/* color palette */
+:root {
+    --teal: #008080;
+    --cream: #FFFDD0;
+    --red-orange: #FF4500;
+    --pink: #FFC0CB;
+    --black: #000000;
+    --gray: #F5F5F5;
+}
+
+/* font css */
+.special-elite-regular {
+  font-family: "Special Elite", system-ui;
+  font-weight: 400;
+  font-style: normal;
+}
+
+.poppins-regular {
+  font-family: "Poppins", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+}
+
+/* #foo {
+    color: var(--main-color);
+}
+document.body.style.setProperty('--main-color',"#6c0") */
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+.hide {
+    display: none !important;
+}
+
+#calculator {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 3em 15em 1fr;
+    width: 100vw;
+    height: 100vh;
+}
+
+#calc-top {
+    grid-column: 1 / 2;
+    grid-row: 1 / 2;
+    /* border-bottom: solid 1px black; */
+}
+
+#history {
+    height: 100%;
+    width: auto;
+}
+
+#screen {
+    grid-column: 1 / 2;
+    grid-row: 2 / 3;
+    /* border: solid 1px black; */
+    border-radius: 12px;
+    margin-bottom: 25px;
+    position: relative;
+}
+
+#relay-input {
+    font-family: "Poppins", sans-serif;
+    position: absolute;
+    bottom: 25px;
+    right: 25px;
+    font-size: 4rem;
+}
+
+#numpad {
+    grid-column: 1 / 2;
+    grid-row: 3 / 4;
+    display: flex;
+    flex-direction: column;
+    row-gap: 10px;
+    padding: 30px 15px 20px 15px;
+    box-shadow: 0 -5px 10px .5px rgb(0, 0, 0, 0.1);
+    border-radius: 15px;
+    background-color: white;
+}
+
+.row {
+    display: flex;
+    flex-direction: row;
+    column-gap: 10px;
+    justify-content: space-between;
+    height: 100%;
+}
+
+button {
+    border: none;
+    border-radius: 25px;
+    height: 100%;
+    width: 100%;
+    font-size: 1.3rem;
+    font-weight: 500;
+    box-shadow: 0 4px 4px .1px rgb(0, 0, 0, 0.2);
+    font-family: "Poppins", sans-serif;
+    background-color: #f3f3f3;
+}
+
+button:hover, .hover {
+    background-color: #dddddd;
+}
+
+#reset-screen div {
+    height: 100%;
+    width: 100%;
+}
+
+.operations {
+    background-color: #ffc467;
+}
+
+.operations:hover {
+    background-color: #e8a852;
+}
+
+@media screen and (min-width: 425px) {
+    #body {
+        position: relative;
+        padding: 10px;
+    }
+
+    #calculator {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        margin-top: -415px;
+        margin-left: -212.5px;
+        max-width: 425px;
+        max-height: 830px;
+        border: solid 1px #dddddd;
+        border-radius: 15px;
+    }
+}
