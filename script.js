@@ -64,7 +64,7 @@ document.addEventListener('keydown', (event) => {
 // }
 // console.log(operations);
 // console.log(operand);
-let prevInput, currentInput, operation;
+let prevInput, currentInput, operation, result;
 
 function calculate(callback) { // using callback since need sliceInput() to execute before calculate() -> calculate dependent on sliceInput
     console.log('calculating');
@@ -87,8 +87,7 @@ function calculate(callback) { // using callback since need sliceInput() to exec
 
     if (operation === '*') {
         console.log('multiplying');
-        
-        return prevInput * currentInput;
+        result = prevInput * currentInput;
     }
     if (operation === '/') {
         console.log('dividing');
@@ -107,30 +106,32 @@ function calculate(callback) { // using callback since need sliceInput() to exec
     // return (operation, currentInput, nextInput);
 }
 
+// let isOperandInInput = false;
+// function operantExist() {
+//     for (let i = 0; i < userInput.length; i++) {
+//         console.log('slicing input');
+//         // console.log(userInput[i]);
+//         if (operands.includes(userInput[i])) { // cannot use in because not parsing correctly -> not detecting operand correctly
+//             isOperandInInput = true;
+//         } // when detecting priority operation, get input before operation index --> prevInput will have inputs and operation (loop through again to look for more operations) -- keep in mind, that to get the prevInput before operation, have to start from operation and work back
+//     }
+//     return isOperandInInput;
+// }
+
 function sliceInput() {
     for (let i = 0; i < userInput.length; i++) {
         console.log('slicing input');
-        // console.log(userInput[i]);
         if (operands.includes(userInput[i])) { // cannot use in because not parsing correctly -> not detecting operand correctly
             operation = userInput[i];
             prevInput = parseInt(userInput.slice(0, i));
-            currentInput = parseInt(userInput.slice(i+1)); // getting input from the element after the operand and beyond
-            console.log(userInput[i]);
-            console.log(parseInt(userInput.slice(0, i)));
-            console.log(parseInt(userInput.slice(i+1)));
+            currentInput = parseInt(userInput.slice(i + 1)); // getting input from the element after the operand and beyond
+            // console.log(userInput[i]);
+            // console.log(parseInt(userInput.slice(0, i)));
+            // console.log(parseInt(userInput.slice(i + 1)));
         } // when detecting priority operation, get input before operation index --> prevInput will have inputs and operation (loop through again to look for more operations) -- keep in mind, that to get the prevInput before operation, have to start from operation and work back
     }
     return { prevInput, operation, currentInput };
 }
-
-
-
-// for (const button of buttonList) {
-//     switch (button.value) {
-//         case '+':
-//     }
-// }
-
 
 // implementing pressing buttons
 for (const button of buttonList) {
