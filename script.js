@@ -1,45 +1,19 @@
-
-// const userInput = document.getElementById('user-input');
-
-// function getInput() {
-//     inputHidden.addEventListener('input')
-// }
-
-// const num1 = document.getElementById('1').value;
-// console.log(num1)
-// document.addEventListener('keydown', (event) => {
-//     console.log(`${event.key}`);
-//     if (event.key === num1) {
-//         inputResult += 1;
-//         inputDisplay.append('1');
-//     }
-// })
-
-// function buttonClicked(button) {
-//     const clickedBtn = document.getElementById(button);
-//     console.log(`${clickedBtn.id}`)
-//     clickedBtn.addEventListener('click', function () {
-//         console.log(`id of button clicked ${clickedBtn}`);
-//     })
-// }
-
 let userInput = '';
 const inputDisplay = document.getElementById('relay-input');
-const buttonList = document.querySelectorAll('button');
+const buttons = document.querySelectorAll('button');
 const operations = document.getElementsByClassName('operations');
 // const expression = document.getElementById('prev-input');
+
 let operands = [];
 for (let i = 0; i < operations.length; i++) {
     operands.push(operations[i].value);
 }
-// console.log(operands);
+
 document.addEventListener('keydown', (event) => {
-    // console.log(`${event.key}`);
-    for (const button of buttonList) {
+    for (const button of buttons) {
         if (event.key === button.innerText || event.shiftKey === button.innerText) {
             userInput += button.innerText;
             inputDisplay.innerText += (`${button.innerText}`); // append works too
-            // running inputs when second or more operation detected
         }
         if (event.key === '(') {
             userInput += '(';
@@ -50,85 +24,27 @@ document.addEventListener('keydown', (event) => {
             inputDisplay.innerText += (')');
         }
         if (event.key === 'Enter') {
-            // console.log('Enter clicked');
-            // expression.innerHTML = inputDisplay;
             inputDisplay.innerHTML = String(calculate());
         }
     }
-    // console.log(userInput);
 })
 
-// const operand = [];
-// for (let i; i < operations.length; i++) {
-//     operand.push(operations[i].value);
-// }
-// console.log(operations);
-// console.log(operand);
-let prevInput, currentInput, operation;
-
-function calculate() { // using callback since need sliceInput() to execute before calculate() -> calculate dependent on sliceInput
-    console.log('calculating');
-    const { prevInput, operation, currentInput } = sliceInput();
-    // prevInput = parseInt(callback()[0]); => removed since line above is sufficient
-    // operation = callback()[1];
-    // currentInput = parseInt(callback()[2]);
-    // console.log(typeof (prevInput));
-    // console.log(`${prevInput} ${operation} ${currentInput}`);
-
-    // The problem here was "i" was not = to 0 and slice is not working correctly
-    // for (let i = 0; i < userInput.length; i++) {
-    //     console.log(userInput[i]);
-    //     if (userInput[i] in operations) { 
-    //         operation = userInput[i];
-    //         prevInput = userInput.slice(i);
-    //         nextInput = userInput.slice(-i); 
-    //     }
-    // }
-    if (operation === '*') {
-        console.log('multiplying');
-        
-    }
-    if (operation === '/') {
-        console.log('dividing');
-        return prevInput / currentInput;
-    }
-    if (operation === '+') { // either === or .includes() works
-        console.log('adding');
-        return prevInput + currentInput;
-    }
-    if (userInput.includes('-')) {
-        console.log('subtracting');
-        return prevInput - currentInput;
-    }
-
-    // console.log(prevInput, operation, currentInput);
-    // return (operation, currentInput, nextInput);
-}
-
+let prevInput, currentInput;
 function sliceInput() {
     for (let i = 0; i < userInput.length; i++) {
-        console.log('slicing input');
-        // console.log(userInput[i]);
-        if (operands.includes(userInput[i])) { // cannot use in because not parsing correctly -> not detecting operand correctly
-            operation = userInput[i];
-            prevInput = parseInt(userInput.slice(0, i));
-            currentInput = parseInt(userInput.slice(i + 1)); // getting input from the element after the operand and beyond
-            // console.log(userInput[i]);
-            // console.log(parseInt(userInput.slice(0, i)));
-            // console.log(parseInt(userInput.slice(i + 1)));
-            return { prevInput, operation, currentInput };
-        } // when detecting priority operation, get input before operation index --> prevInput will have inputs and operation (loop through again to look for more operations) -- keep in mind, that to get the prevInput before operation, have to start from operation and work back
+        if (userInput[i] === '*') {
+            
+        }
     }
 }
 
-// implementing pressing buttons
-for (const button of buttonList) {
-    button.addEventListener('click', function () {
-        if (button.value = 'equal') {
-            calculate(sliceInput);
-        }
-        console.log(`${button} clicked; value: ${button.value}}`);
-        userInput += button.innerText;
-        inputDisplay.innerText += button.innerText;
-    })
-}
+// let containOperand = false;
+// // loop through user input and split prevInput and currentInput at point of priority operation 
+// // (parenthesis, exponential, multiplication, division, addition, subtraction)
+// function checkingContainOperand() {
+//     for (let i = 0; i < userInput.length; i++) {
+//         if (userInput[i] === '*') {
+//             return 
+//         }
+//     }
+// }
