@@ -86,6 +86,11 @@ document.addEventListener('keydown', (event) => {
             }
         }
 
+        if (event.key === '%') {
+            alert('coming soon!');
+            return;
+        }
+
         if (event.key === button.innerText) { // if keyboard key clicked is a clickable button (a button option), then display --> links keyboard key with buttons
             console.log(button.innerText);
             userInput += button.innerText;
@@ -150,6 +155,15 @@ for (const button of buttons) { // adding click event listener to buttons to dis
                 return;
             }
         }
+        if (button.value === '%') {
+            alert('coming soon!');
+            return;
+        }
+        if (button.value === 'pos-neg') {
+            alert('coming soon!');
+            return;
+        }
+
 
         if (resultDisplayed) { // if result is displayed and button clicked is not any of the special case values
             topInputDisplay.textContent = previousResultDisplay; // move result to top
