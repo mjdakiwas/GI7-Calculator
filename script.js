@@ -2,12 +2,12 @@ let userInput = '';
 const calculator = document.getElementById('calculator')
 const inputDisplay = document.getElementById('relay-input');
 const buttons = document.querySelectorAll('button');
-// const operations = document.querySelectorAll('operations');
 const topInputDisplay = document.getElementById('prev-input');
 const darkModeBtn = document.getElementById('dark-mode');
 const lightModeBtn = document.getElementById('light-mode');
 const allElements = document.querySelectorAll('*');
 
+// aesthetic choice of toggling between light mode and dark mode
 darkModeBtn.addEventListener('click', () => {
     toggleVisibility(darkModeBtn);
     toggleVisibility(lightModeBtn);
@@ -27,21 +27,13 @@ function toggleVisibility(element) {
     element.classList.toggle('hide');
 }
 
+// setting rule of operation
 let operands = ['*', '/', '+', '-'];
-// for (let i = 0; i < operations.length; i++) {
-//     operands.push(operations[i].value);
-// }
-
-// let containOperand = true;
 let resultDisplayed = false; // flag to see if result is shown in the input display
+// used for altering screen display of current input and previous input
 
+// keyboard input control
 document.addEventListener('keydown', (event) => {
-    // if (result) {
-    //     topInputDisplay.innerText = result;
-    //     inputDisplay.innerText = '';
-    // }
-    // console.log(event.key);
-
     if (event.key === 'C') {
         userInput = '';
         inputDisplay.textContent = '';
@@ -55,7 +47,6 @@ document.addEventListener('keydown', (event) => {
         return;
     }
     if (event.key === 'Enter' || event.key === '=') {
-        // console.log(event.key);
         result = String(calculate(inputArrange))
         inputDisplay.textContent = result;
         inputOperands = [];
@@ -74,10 +65,6 @@ document.addEventListener('keydown', (event) => {
 
     for (const button of buttons) { // preventing user from inputting any keys that's not a button option
         inputDisplay.scrollLeft = inputDisplay.scrollWidth;
-        // if (button.className == 'mode') {
-        //     console.log(button.className)
-        //     continue;
-        // }
         if (['=', 'C', 'clear', 'backspace'].includes(button.innerText)) {continue};
 
         if (operands.includes(userInput.slice(-1)) && event.key === '-') {
@@ -94,24 +81,15 @@ document.addEventListener('keydown', (event) => {
         }  
 
         if (event.key === '.') {
-            // if (userInput.includes('.')) {
-            //     // if a period already exist in the input, don't add period; unless operand is added and new num is added
-            //     // add period only if operand is added when a period is already present in the input after period
-            //     const operandExistAfterPeriod = checkingElementsAfterPeriod();
-            //     if (!operandExistAfterPeriod) { // no operand after period -> don't append period
-            //         event.preventDefault;
-            //         return;
-            //     }
-            // }
             if (!checkingPeriod()) {
                 return;
             }
         }
 
-        if (event.key === button.innerText) { // if key clicked is a clickable button, then display
+        if (event.key === button.innerText) { // if keyboard key clicked is a clickable button (a button option), then display --> links keyboard key with buttons
             console.log(button.innerText);
             userInput += button.innerText;
-            inputDisplay.textContent += button.innerText; // append works too
+            inputDisplay.textContent += button.innerText;
             return;
             // inputDisplay.animate([
             //     {opacity: .5},
@@ -123,36 +101,9 @@ document.addEventListener('keydown', (event) => {
             // });
         }
     }
-    // if (event.key === '(') {
-    //         userInput += '(';
-    //         inputDisplay.innerText += '(';
-    //     }
-    //     if (event.key === ')') {
-    //         userInput += ')';
-    //         inputDisplay.innerText += (')');
-    //     }
-    
 })
 
-// function checkingElementsAfterPeriod() {
-//     const periodIndex = userInput.indexOf('.');
-//     if (periodIndex === -1) {
-//         // operand not found after period
-//         return false;
-//     }
-
-//     const inputAfterPeriod = userInput.slice(periodIndex + 1);
-//     console.log(inputAfterPeriod);
-//     for (let i = 0; i < inputAfterPeriod.length; i++) {
-//         console.log(inputAfterPeriod[i]);
-//         if (operands.includes(inputAfterPeriod[i])) { // element is an operand
-//             return true; // operand found after period
-//         }
-//     }
-
-//     return false; // default that current number already has a period, so can't add another period
-// }
-
+// function checks if period is present in last number input
 function checkingPeriod() {
     // finding last index of all operators and taking the max/largest operator index --> largest index means most recent operator inputted
     const lastOperandIndex = Math.max(...operands.map(operand => userInput.lastIndexOf(operand)));
@@ -165,6 +116,7 @@ function checkingPeriod() {
 }
 
 // control for clicking buttons
+// has same/similar logic as keyboard key control
 for (const button of buttons) { // adding click event listener to buttons to display input
     button.addEventListener('click', () => {
         console.log(`${button.value} clicked`);
@@ -194,14 +146,6 @@ for (const button of buttons) { // adding click event listener to buttons to dis
             return;
         }
         if (button.value === '.') {
-            // if (userInput.includes('.')) {
-            //     // if a period already exist in the input, don't add period; unless operand is added and new num is added
-            //     // add period only if operand is added when a period is already present in the input after period
-            //     const operandExistAfterPeriod = checkingElementsAfterPeriod();
-            //     if (!operandExistAfterPeriod) { // no operand after period -> don't append period
-            //         return;
-            //     }
-            // }
             if (!checkingPeriod()) {
                 return;
             }
@@ -243,7 +187,7 @@ for (const button of buttons) { // adding click event listener to buttons to dis
     })
 }
 
-
+// arranges user input into an array of operands and an array of numbers
 function inputArrange() {
     let inputOperands = []; // storing input operands
     let inputNums = []; // storing input nums
@@ -251,12 +195,13 @@ function inputArrange() {
     let num = '';
     for (let i = 0; i < userInput.length; i++) {
         const inputChar = userInput[i];
-
         if (operands.includes(inputChar)) {
+            // checking if iteration is an operand
             if (inputChar === '-' && (i === 0 || operands.includes(userInput[i - 1]))) {
-                // char is negation; adding negation symbol '-'
+                // checking if iteration is a negative number
+                // determines if negative number if '-' symbol is at the beginning of the input or follows directly after an operand
                 console.log(inputChar);
-                num += inputChar;
+                num += inputChar; // iteration is negation; adding negation symbol '-'
             } else {
                 // char isn't negation
                 if (num != '') {
@@ -265,206 +210,47 @@ function inputArrange() {
                 }
                 inputOperands.push(inputChar);
             }
-            } else {
-                // char not an operand -> regular number
-                num += inputChar;
-            }
+        } else {
+            // char not an operand -> regular number
+            num += inputChar;
         }
+    }
     
     if (num !== '') {
         // num isn't empty meaning negation symbol added => number is negative
-        inputNums.push(num);
+        inputNums.push(num); // pushing number into
     }
-
-
-    // this solution works for negation (i.e. -1+1 and 1+-1)
-    // let num = '';
-    // for (let i = 0; i < userInput.length; i++) {
-    //     const inputChar = userInput[i];
-
-    //     if (operands.includes(inputChar)) {
-    //         if (inputChar === '-' && (i === 0 || operands.includes(userInput[i - 1]))) {
-    //             // char is negation; adding negation symbol '-'
-    //             console.log(inputChar);
-    //             num += inputChar;
-    //         } else {
-    //             // char isn't negation
-    //             if (num != '') {
-    //                 inputNums.push(num);
-    //                 num = '';
-    //             }
-    //             inputOperands.push(inputChar);
-    //         }
-    //         } else {
-    //             // char not an operand -> regular number
-    //             num += inputChar;
-    //         }
-    //     }
-    
-    // if (num !== '') {
-    //     // num isn't empty meaning negation symbol added => number is negative
-    //     inputNums.push(num);
-    // }
-
-    // this solution works for subtraction (i.e. 1+1-1)
-    // for (let i = 0; i < userInput.length; i++) {
-    //         // console.log(`${userInput[i]}`);
-    //         if (operands.includes(userInput[i])) {
-    //             // console.log(`pushing ${userInput[i]}`);
-    //             inputOperands.push(userInput[i]);
-    //         // } else {
-    //         //     if (operands.includes(userInput[i - 1])) {
-    //         //         console.log(`${userInput[i-1]} is an operand; taking value after it`);
-    //         //         console.log(`${userInput.slice(i+1)}`);
-    //         //     } else {
-    //         //         console.log(`${userInput.slice(0, i)}`);
-    //         //     }
-    //         //     inputNums.push(userInput[i]);
-    //         }
-    //     }
-    //     for (let j = 0; j < userInput.length; j++) {
-    //         if (inputOperands.includes(userInput[j])) {
-    //             // console.log(`${userInput.split(inputOperands)}`)
-    //             userInput.split(userInput[j]) // splitting userInput at every operand index
-    //                 .forEach((num) => {
-    //                     console.log(`pushing ${num}`);
-    //                     inputNums.push(num);
-    //                 });
-    //         }
-    //         if (inputOperands.length === 0) {
-    //             // user inputted a number but not an expression
-    //             inputNums.push(userInput);
-    //         }
-    //     }
-
-
-    // const isOperand = (char) => operands.includes(char); // function checking if operand contains char (parameter)
-
-    // for (let i = 0; i < userInput.length; i++) {
-    //     const char = userInput[i]; // will check current iteration of input
-
-    //     if (isOperand(char)) {
-    //         // checking if '-' is negation -- if negation symbol beginning of input or follows an operand
-    //         if (char === '-' && (i === 0 || isOperand(userInput[i - 1]))) {
-    //             // char is negation; adding negation symbol '-'
-    //             console.log(char);
-    //             num += char;
-    //         } else {
-    //             // char isn't negation
-    //             if (num != '') {
-    //                 inputNums.push(num);
-    //                 num = '';
-    //             }
-    //             inputOperands.push(char);
-    //         }
-    //     } else {
-    //         // char not an operand -> regular number
-    //         num += char;
-    //     }
-
-    //     if (num !== '') {
-    //         // num isn't empty meaning negation symbol added => number is negative
-    //         inputNums.push(num);
-    //     }
-    // }
-
-    
-    // negativeIndex = inputOperands.indexOf('-');
-    // console.log(inputOperands);
-    // console.log(inputNums);
-    // // console.log(inputOperands[negativeIndex]);
-    // console.log(inputNums[negativeIndex]);
-    // if (inputNums[negativeIndex] === '') { // if there's no number before '-' sign then it's a symbol of negation
-    //     inputOperands.splice(negativeIndex, 1);
-    //     console.log(`removing: ${inputNums[negativeIndex]}; appending: -${inputNums[negativeIndex + 1]}`)
-    //     inputNums.splice(negativeIndex, 2, `-${inputNums[negativeIndex + 1]}`);
-    // }
     console.log('finished arranging');
     console.log(inputOperands);
     console.log(inputNums);
     return { inputOperands, inputNums };
 }
 
+// function calculating numbers and operands based on arranged arrays
 function calculate(callback) {
     console.log('calculating');
-    let result, operandIndex;
+    let result;
     const { inputOperands, inputNums } = callback();
-    // console.log(inputOperands);
-    // console.log(inputNums);
-    // console.log(inputOperands.length);
     
     for (let j = 0; j < operands.length; j++) { 
+        // looping through operands based on operation priority
         console.log(`looping through priority ${operands[j]} operand`);
         if (inputOperands.length == 0 && inputNums.length > 0) {
-                console.log(inputOperands.length);
-                console.log(inputNums.length);
-                // no operands but user inputted a number
-                result = inputNums[0];
-            }
-        // for (let i = 0; i < inputOperands.length; i++) { 
+            console.log(inputOperands.length);
+            console.log(inputNums.length);
+            // returns input if no operands found but user inputted a number
+            result = inputNums[0];
+        }
+
         let i = 0;
         while (i < inputOperands.length) {
-            // can't use for loop since it iteration messes up while modifying inputOperands
-            // since can't use for loop when modifying, logic is don't modify array
-            // console.log('looping through inputOperands to see if inputOperands == operands');
             console.log(`currently checking if ${inputOperands[i]} = ${operands[j]}`);
             if (inputOperands[i] === operands[j]) {
                 console.log(`${inputOperands[i]} = ${operands[j]}; starting calculation`);
-                // if (inputOperands[i] === '*') {
-                //     console.log('multiplying');
-                //     operandIndex = inputOperands.indexOf('*');
-                //     result = parseFloat(inputNums[operandIndex]) * parseFloat(inputNums[operandIndex + 1]);
-                //     // inputOperands.splice(operandIndex, 1);
-                //     inputNums.splice(operandIndex, 2);
-                //     inputNums.splice(operandIndex, 0, String(result));
-                //     console.log(`${inputNums[operandIndex]} * ${inputNums[operandIndex + 1]}`)
-                //     console.log(result);
-                //     // console.log(inputOperands);
-                //     // console.log(inputNums);
-                // }
-                // if (inputOperands[i] === '/') {
-                //     operandIndex = inputOperands.indexOf('/');
-                //     console.log(`trying to divide: ${inputNums[operandIndex]} / ${inputNums[operandIndex + 1]}`)
-                //     if (inputNums[operandIndex + 1] === '0') {
-                //         console.log(`${inputNums[operandIndex + 1]} = 0`);
-                //         result = 'undefined';
-                //     } else {
-                //         console.log('dividing');
-                //         result = parseFloat(inputNums[operandIndex]) / parseFloat(inputNums[operandIndex + 1]);
-                //         inputNums.splice(operandIndex, 2);
-                //         inputNums.splice(operandIndex, 0, String(result));
-                //     }
-                // }
-                // if (inputOperands[i] === '+') {
-                //     console.log('adding');
-                //     operandIndex = inputOperands.indexOf('+');
-                //     result = parseFloat(inputNums[operandIndex]) + parseFloat(inputNums[operandIndex + 1]);
-                //     // let removedOperand = inputOperands.splice(operandIndex, 1); // removes operand from array of input operands since it's been accounted for
-                //     inputNums.splice(operandIndex, 2); // removes numbers from array of input numbers since they've been accounted for
-                //     inputNums.splice(operandIndex, 0, String(result)); // add result into array of input numbers to be calculated with
-                //     console.log(`${inputNums[operandIndex]} + ${inputNums[operandIndex + 1]}`)
-                //     console.log(result);
-                //     // console.log(removedOperand);
-                //     // console.log(removedNums);
-                //     // console.log(inputOperands);
-                //     // console.log(inputNums);
-                // }
-                // if (inputOperands[i] === '-') {
-                //     console.log('subtracting');
-                //     operandIndex = inputOperands.indexOf('-');
-                //     result = parseFloat(inputNums[operandIndex]) - parseFloat(inputNums[operandIndex + 1]);
-                //     // inputOperands.splice(operandIndex, 1);
-                //     inputNums.splice(operandIndex, 2);
-                //     inputNums.splice(operandIndex, 0, String(result));
-                //     // console.log(removedOperand);
-                //     // console.log(removedNums);
-                //     console.log(inputOperands);
-                //     console.log(inputNums);
-                // } 
-
                 const leftOfOperand = parseFloat(inputNums[i]);
                 const rightOfOperand = parseFloat(inputNums[i + 1]);
 
+                // calculating is priority operand is found in input operand --> allows operation to be executed in order
                 switch (inputOperands[i]) {
                     case '*':
                         result = leftOfOperand * rightOfOperand;
@@ -483,216 +269,17 @@ function calculate(callback) {
                         break;
                 }
 
+                // removing operands and numbers already calculated so when iterated again, they won't count in next calculation
                 inputOperands.splice(i, 1);
-                inputNums.splice(i, 2, String(result));
+                inputNums.splice(i, 2, String(result)); // however appending back result so that it can calculated on along with the remainding operands and numbers
             } else {
                 i++
                 console.log(`${inputOperands[i]} =! ${operands[j]}; skipping ${operands[j]} to look for next priority operand in inputOperands`);
             }
-            // console.log(inputOperands);
-            // console.log(inputNums);
-            // console.log(`loop of ${inputOperands[i]} finished`);
         }
         console.log(`loop of ${operands[j]} finished`);
         console.log(`result of finished loop: ${result}`);
     }
+    // last input is the last result added into the inputNums array
     return inputNums[0];
 }
-
-// function calculate() {
-//     console.log('calculating');
-//     let result, operandIndex;
-//     const { inputOperands, inputNums } = inputArrange();
-//     console.log(inputOperands);
-//     console.log(inputNums);
-//     // console.log(inputOperands.length);
-    
-//     for (let j = 0; j < operands.length; j++) { 
-//         console.log('looping through operands');
-//         let i = 0
-//         while (i < inputOperands.length) { // can't use for loop since it iteration messes up while modifying inputOperands
-//             console.log('looping through inputOperands to see if inputOperands == operands');
-//             if (inputOperands[i] === operands[j]) {
-//                 console.log(`${inputOperands[i]} = ${operands[j]}; starting calculation`);
-//                 if (inputOperands[i] === '*') {
-//                     console.log('multiplying');
-//                     operandIndex = inputOperands.indexOf('*');
-//                     result = parseFloat(inputNums[operandIndex]) * parseFloat(inputNums[operandIndex + 1]);
-//                     inputOperands.splice(operandIndex, 1);
-//                     inputNums.splice(operandIndex, 2);
-//                     inputNums.splice(0, 0, String(result));
-//                 }
-//                 if (inputOperands[i] === '/') {
-//                     console.log('dividing');
-//                     operandIndex = inputOperands.indexOf('/');
-//                     result = parseFloat(inputNums[operandIndex]) / parseFloat(inputNums[operandIndex + 1]);
-//                     inputOperands.splice(operandIndex, 1);
-//                     inputNums.splice(operandIndex, 2);
-//                     inputNums.splice(0, 0, String(result));
-//                 }
-//                 if (inputOperands[i] === '+') {
-//                     console.log('adding');
-//                     operandIndex = inputOperands.indexOf('+');
-//                     result = parseFloat(inputNums[operandIndex]) + parseFloat(inputNums[operandIndex + 1]);
-//                     let removedOperand = inputOperands.splice(operandIndex, 1); // removes operand from array of input operands since it's been accounted for
-//                     let removedNums = inputNums.splice(operandIndex, 2); // removes numbers from array of input numbers since they've been accounted for
-//                     inputNums.splice(0, 0, String(result)); // add result into array of input numbers to be calculated with
-//                     console.log(result);
-//                     console.log(removedOperand);
-//                     console.log(removedNums);
-//                     console.log(inputOperands);
-//                     console.log(inputNums);
-//                 }
-//                 if (inputOperands[i] === '-') {
-//                     console.log('subtracting');
-//                     operandIndex = inputOperands.indexOf('-');
-//                     result = parseFloat(inputNums[operandIndex]) - parseFloat(inputNums[operandIndex + 1]);
-//                     inputOperands.splice(operandIndex, 1);
-//                     inputNums.splice(operandIndex, 2);
-//                     inputNums.splice(0, 0, String(result));
-//                     // console.log(removedOperand);
-//                     // console.log(removedNums);
-//                     console.log(inputOperands);
-//                     console.log(inputNums);
-//                 }
-//             } else {
-//                 console.log(`${inputOperands[i]} =! ${operands[j]}; skipping ${operands[j]} to look for next priority operand in inputOperands`);
-//             }
-//             i++;
-//             // console.log(`loop of ${inputOperands[i]} finished`);
-//         }
-//         console.log(`loop of ${operands[j]} finished`);
-//         console.log(`result of finished loop: ${result}`);
-//     }
-//     // checkingContainOperand(result);
-
-//     // for (let i = 0; i < inputOperands.length; i++) {
-//     //     while (containOperand === true) {
-//     //         if (inputOperands[i] === '*') {
-//     //             console.log('multiplying');
-//     //             result = parseFloat(inputNums[i]) * parseFloat(inputNums[i + 1]);
-//     //             console.log(result);
-//     //         }
-//     //         if (inputOperands[i] === '/') {
-//     //             console.log('dividing')
-//     //             result = parseFloat(inputNums[i]) / parseFloat(inputNums[i + 1]);
-//     //             console.log(result);
-//     //         }
-//     //         if (inputOperands[i] === '+') {
-//     //             console.log('adding')
-//     //             result = parseFloat(inputNums[i]) + parseFloat(inputNums[i + 1]);
-//     //             console.log(result);
-//     //         }
-//     //         if (inputOperands[i] === '-') {
-//     //             console.log('subtracting')
-//     //             result = parseFloat(inputNums[i]) - parseFloat(inputNums[i + 1]);
-//     //             console.log(result);
-//     //         }
-//     //     }
-
-//     // }
-//     return result;
-// }
-
-// function checkingContainOperand(inputOperands) {
-//     for (let i = 0; i < input.length; i++) {
-//         if (operands.includes(input[i])) {
-//             containOperand = true;
-//             break;
-//         } else {
-//             containOperand = false;
-//         }
-//     }
-//     return containOperand;
-// }
-
-
-
-
-
-
-// let prevInput, currentInput, operand, result;
-// function calculate() { // using callback since need sliceInput() to execute before calculate() -> calculate dependent on sliceInput
-//     console.log('calculating');
-//     let { prevInput, operand, currentInput, containOperand } = sliceInput(userInput);
-//     console.log(containOperand);
-
-//     if (operand === '*') {
-//         console.log('multiplying');
-//         result = prevInput * currentInput;
-//     }
-//     if (operand === '/') {
-//         console.log('dividing');
-//         result = prevInput / currentInput;
-//     }
-//     if (operand === '+') { // either === or .includes() works
-//         console.log('adding');
-//         if (checkingContainOperand(prevInput) === false && checkingContainOperand(currentInput) === false) {
-//             console.log('prevInput and currentInput do not have operands');
-//             result = prevInput + currentInput;
-//             console.log(result);
-//         }
-//         else if (checkingContainOperand(prevInput) === true && checkingContainOperand(currentInput) === false) {
-//             console.log('prevInput has operand');
-//             console.log({ prevInput, currentInput } = sliceInput(prevInput));
-//             console.log(sliceInput(prevInput));
-//         }
-//         else if (checkingContainOperand(prevInput) === false && checkingContainOperand(currentInput) === true) {
-//             console.log('currentInput has operand');
-//             while (containOperand === true) {
-//                 currentSplit_prevInput = sliceInput(currentInput).prevInput;
-//                 currentSplit_currentInput = sliceInput(currentInput).currentInput;
-//                 currentSplit_operand = sliceInput(currentInput).operand;
-//                 if (currentSplit_operand == ! '+') {
-//                     calculate(currentInput);
-//                 } else {
-//                     result = parseFloat(prevInput) + parseFloat(currentSplit_prevInput) + parseFloat(currentSplit_currentInput);
-//                 }
-//             }
-//             console.log(prevInput);
-//             // console.log(sliceInput(currentInput));
-//             console.log(currentSplit_prevInput);
-//             console.log(currentSplit_currentInput);
-//             console.log(result);
-//         }
-//     }
-//     if (operand === '-') {
-//         console.log('subtracting');
-//         result = prevInput - currentInput;
-//     }
-
-
-
-// return result;
-// }
-
-// function sliceInput(input) {
-//     console.log('slicing input');
-//     // console.log(containOperand);
-//     for (let i = 0; i < input.length; i++) {
-//         if (operands.includes(input[i])) { // cannot use in because not parsing correctly -> not detecting operand correctly
-//             operand = input[i];
-//             prevInput = input.slice(0, i);
-//             currentInput = input.slice(i + 1); // getting input from the element after the operand and beyond
-//             break; // have to break since for loop keeps running and would split at the first operation with same priority (i.e. 1+2+3 returns 1+2, +, 3 instead of 1, +, 2+3)
-//         } // when detecting priority operation, get input before operation index --> prevInput will have inputs and operation (loop through again to look for more operations) -- keep in mind, that to get the prevInput before operation, have to start from operation and work back
-//     }
-//     console.log(`${prevInput}, ${operand}, ${currentInput}, ${containOperand}`);
-//     // console.log(containOperand);
-//     // console.log('slicing completed');
-//     return { prevInput, operand, currentInput, containOperand };
-// }
-// // loop through user input and split prevInput and currentInput at point of priority operation 
-// // (parenthesis, exponential, multiplication, division, addition, subtraction)
-// function checkingContainOperand(input) {
-//     for (let i = 0; i < input.length; i++) {
-//         // console.log(input[i]);
-//         if (operands.includes(input[i])) {
-//             containOperand = true;
-//             break;
-//         } else {
-//             containOperand = false;
-//         }
-//     }
-//     return containOperand;
-// }
